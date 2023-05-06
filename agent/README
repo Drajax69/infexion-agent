@@ -1,3 +1,5 @@
 Where to start
 - Go board and write functions:
     - possible_moves_pruned()
+- Ways to make it more efficient:
+    - Use of BitBoards/Some other type of representation of the Board

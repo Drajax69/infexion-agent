@@ -32,7 +32,7 @@ class Agent:
         Return the next action to take.
         """
         valid_moves = self._board.possible_moves_pruned(self._color)
-        return valid_moves[0]
+        return (SpawnAction(HexPos(6, 1)))
         # return min_max_strategy(self, 0) # Currently choosing the first valid move I can find
 
     def turn(self, color: PlayerColor, action: Action, **referee: dict):
