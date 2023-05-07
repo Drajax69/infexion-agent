@@ -51,7 +51,7 @@ def min_max_strategy(agent, depth = 3):
     """
     # print(actions)
 
-    for action in actions:
+    for action in sorted_actions:
         new_state:Board = agent._board.apply_action(action, agent._color)
         if(new_state.game_won(agent._color)): # Case next move is game end - no point searching
             return action

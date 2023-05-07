@@ -3,3 +3,9 @@ Where to start
     - possible_moves_pruned()
 - Ways to make it more efficient:
     - Use of BitBoards/Some other type of representation of the Board
+
+
+End of tomorrow tasks:
+ - Make code faster || Test my_agent vs minimax_TL and we both try to improve ours
+ - Run it against Gradescope and have it submission ready
+ - minimax_TL needs to use my Board()
