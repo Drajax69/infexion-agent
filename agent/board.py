@@ -5,7 +5,6 @@ from referee.game.player import PlayerColor
 from referee.game.hex import HexDir, HexPos
 from typing import List
 
-
 class Board:
     def __init__(self):
         self.board = {}
@@ -158,7 +157,6 @@ class Board:
                     if(self.pruned_valid(SpawnAction(cell), valid_moves, color)):
                         valid_moves.append(SpawnAction(cell))
 
-
             return valid_moves
 
 
@@ -186,7 +184,7 @@ class Board:
         q = cell.q
         for dir in dirs:
             if(((r + dir[0])%7,(q + dir[1])%7) in self.board):
-                colors.append(self.board[(r + dir[0],q + dir[1])][0])
+                colors.append(self.board[((r + dir[0])%7,(q + dir[1])%7)][0])
 
         return colors
 
