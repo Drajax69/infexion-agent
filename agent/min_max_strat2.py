@@ -3,41 +3,44 @@ from .board import Board
 from referee.game.player import PlayerColor
 from .commonutils import *
 
-def min_max_strat2(state:Board, depth: int, color: PlayerColor, isMaximizingPlayer:bool, alpha = float('-inf'), beta = float('inf')):
 
-    if depth == 0:
-        return (util(state, color), None)
-    if ((state.game_won(color) or state.game_won(color.opponent)) and depth < 2):
-        return (util(state, color), None)
+def min_max_strat2(state:Board, current_depth: int, player: PlayerColor, alpha = float('-inf'), beta = float('inf')):
+    if current_depth == 0:
+        return (util(state), None)
+    if ((state.game_won(player) or state.game_won(player.opponent)) and current_depth < 2):
+        return (util(state), None)
 
-    bestAction = None
-    if isMaximizingPlayer :
-        bestVal = float('-inf') 
-        actions = state.possible_moves_pruned(color)
+    if player == PlayerColor.RED :
+        best_action = None
+        best_score = float('-inf') 
+        actions = state.possible_moves_pruned(player)
         for action in actions :
-            
-            value, _action = min_max_strat2(state, depth-1, color.opponent, False, alpha, beta)
-            if(bestVal < value):
-                bestVal = value
-                bestAction = action
-            alpha = max(alpha, bestVal)
+            new_state = state.apply_action(action, player)
+            maximising_score, _action = min_max_strat2(new_state, current_depth-1, opponent(player), alpha, beta)
+            if(maximising_score > best_score):
+                best_score = maximising_score
+                best_action = action
+            alpha = max(alpha, best_score)
             if beta <= alpha:
                 break
-        return (bestVal, bestAction)
+        return (best_score, best_action)
     else :
-        bestVal = float('inf') 
-        actions = state.possible_moves_pruned(color)
+        best_action = None
+        worst_score = float('inf') 
+        actions = state.possible_moves_pruned(player)
         for action in actions :
-            value, _action = min_max_strat2(state, depth-1, color.opponent, True, alpha, beta)
-            if(bestVal > value):
-                bestVal = value
-                bestAction = action
-            beta = min(beta, bestVal)
+            new_state = state.apply_action(action, player)
+            minimising_score, _action = min_max_strat2(new_state, current_depth-1, opponent(player), alpha, beta)
+            if(minimising_score < worst_score):
+                worst_score = minimising_score
+                best_action = action
+            beta = min(beta, worst_score)
             if beta <= alpha:
                 break
-        return (bestVal, bestAction)
+        return (worst_score, best_action)
 
-def util(state:Board, color:PlayerColor): # Catered assuming RED is maxing and blue is minimising 
+        
+def util(state:Board): # Catered assuming RED is maxing and blue is minimising 
     powers = state.calculate_power()
-    util_func = (powers[color] - powers[color.opponent])
+    util_func = (powers[PlayerColor.RED] - powers[PlayerColor.BLUE])
     return util_func

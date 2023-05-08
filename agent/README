@@ -1,11 +1,22 @@
-Where to start
-- Go board and write functions:
-    - possible_moves_pruned()
-- Ways to make it more efficient:
-    - Use of BitBoards/Some other type of representation of the Board
-
-
 End of tomorrow tasks:
- - Make code faster || Test my_agent vs minimax_TL and we both try to improve ours
- - Run it against Gradescope and have it submission ready
- - minimax_TL needs to use my Board()
+    - Finish a bit of the report: Amri
+    - Clean up min_max_strat2 function: Amri
+    - Rename files so that Gradescope accepts them: Luoti
+    - Add team.py file to folder: Luoti
+    - Delete unnecessary files: Luoti
+    - Test min_max_strat in cases such as:------->Luoti
+        - Does it work for both Blue and Red?
+        - Does it win against minmax of degree 2, if playing against itself
+        - Can we use degree 4?
+        - Anything else you can thing of
+
+Enhancements(AMRI):
+    - Dynamic depth: Depending on number of moves //  How much time/resources is being taken
+    - Presorting moves
+    - BitBoard representation instead of dictionary
+    
+
+
+Details as of now:
+- their_agent implements min_max_strat2 -> This is the faster strategy as far as I can tell
+
