@@ -34,7 +34,7 @@ class Agent:
         """
         # valid_moves = self._board.possible_moves_pruned(self._color)
         # return (SpawnAction(HexPos(6, 1)))
-        return min_max_strat2(self._board, 3, self._color, True) # Currently choosing the first valid move I can find
+        return min_max_strat2(self._board, 3, self._color, True)[1]# Currently choosing the first valid move I can find
 
     def turn(self, color: PlayerColor, action: Action, **referee: dict):
         """

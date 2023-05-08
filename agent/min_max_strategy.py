@@ -22,7 +22,7 @@ def evaluate_state(state: Board, player: PlayerColor, current_depth: int, alpha=
             score = evaluate_state(new_state, opponent(player), current_depth-1, alpha, beta) # Max score
             best_score = max(best_score, score)
             alpha = max(alpha, best_score)
-            print(f'MAXEROOO:: Alpha: {alpha}, Beta: {beta}')
+            # print(f'MAXEROOO:: Alpha: {alpha}, Beta: {beta}')
 
             if beta <= alpha:
                 maximum_pruned+=1
@@ -37,7 +37,7 @@ def evaluate_state(state: Board, player: PlayerColor, current_depth: int, alpha=
             score = evaluate_state(new_state, opponent(player), current_depth-1, alpha, beta) # Min score
             worst_score = min(worst_score, score)
             beta = min(beta, worst_score)
-            print(f'MINERREE:: Alpha: {alpha}, Beta: {beta}')
+            # print(f'MINERREE:: Alpha: {alpha}, Beta: {beta}')
             if beta <= alpha:
                 minimum_pruned+=1
                 break

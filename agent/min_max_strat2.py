@@ -15,8 +15,8 @@ def min_max_strat2(state:Board, depth: int, color: PlayerColor, isMaximizingPlay
         bestVal = float('-inf') 
         actions = state.possible_moves_pruned(color)
         for action in actions :
+            
             value, _action = min_max_strat2(state, depth-1, color.opponent, False, alpha, beta)
-            print(f'Max: {value}')
             if(bestVal < value):
                 bestVal = value
                 bestAction = action
@@ -25,11 +25,10 @@ def min_max_strat2(state:Board, depth: int, color: PlayerColor, isMaximizingPlay
                 break
         return (bestVal, bestAction)
     else :
-        bestVal = float('-inf') 
+        bestVal = float('inf') 
         actions = state.possible_moves_pruned(color)
         for action in actions :
             value, _action = min_max_strat2(state, depth-1, color.opponent, True, alpha, beta)
-            print(f'Min: {value}')
             if(bestVal > value):
                 bestVal = value
                 bestAction = action
