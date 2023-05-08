@@ -7,6 +7,7 @@ from referee.game import \
 from .board import *
 from typing import List
 from .min_max_strategy import *
+from .min_max_strat2 import *
 
 # This is my red Agent playing
 # The strategy used will be called by the action funciton
@@ -31,9 +32,9 @@ class Agent:
         """
         Return the next action to take.
         """
-        valid_moves = self._board.possible_moves_pruned(self._color)
-        return (SpawnAction(HexPos(6, 1)))
-        # return min_max_strategy(self, 0) # Currently choosing the first valid move I can find
+        # valid_moves = self._board.possible_moves_pruned(self._color)
+        # return (SpawnAction(HexPos(6, 1)))
+        return min_max_strat2(self._board, 3, self._color, True) # Currently choosing the first valid move I can find
 
     def turn(self, color: PlayerColor, action: Action, **referee: dict):
         """
