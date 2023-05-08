@@ -57,11 +57,18 @@ def find_actions(state: Board, color: PlayerColor):
             actions.append(action)
             action = SpreadAction(key, HexDir.Down)
             actions.append(action)
+    #print(actions)
+    actions.sort(key = lambda action: evaluate(nxt_state(state, action, color), color))
     return actions
 
-        
+def nxt_state(state: Board, action: Action, color):
+    new_state = Board(state._state)
+    #print(new_state.render())
+    new_state._turn_color = color
+    new_state.apply_action(action)
+    return new_state
     
-def minimax(state: Board, turn, depth, color):
+def minimax1(state: Board, turn, depth, color):
     #print("EEEEEEEEEEEEEEEEEEEEEEEEEEEEE\n", state.render(), "DDDDDDDDDDDDDDDDDDDDDDDDDDDDD\n")
     if (depth == 0):
         return (evaluate(state, color), None)
@@ -101,8 +108,7 @@ def minimax(state: Board, turn, depth, color):
                 chosed_action = action
         return (min_value, chosed_action)
 
-
-def minimax2(state: Board, turn, depth, color):
+def minimax(state: Board, turn, depth, color, alpha=float("-inf"), beta=float("inf")):
     #print("EEEEEEEEEEEEEEEEEEEEEEEEEEEEE\n", state.render(), "DDDDDDDDDDDDDDDDDDDDDDDDDDDDD\n")
     if (depth == 0):
         return (evaluate(state, color), None)
@@ -119,12 +125,14 @@ def minimax2(state: Board, turn, depth, color):
             new_state = Board(state._state)
             if (new_state._turn_color != color):
                 new_state._turn_color = color
-            print(new_state.render(), "max")
             new_state.apply_action(action)
-            value, _ = minimax2(new_state, "min", depth - 1, color)
+            value, _ = minimax(new_state, "min", depth - 1, color)
             if (value > max_value):
                 max_value = value
                 chosed_action = action
+            alpha = max(max_value, alpha)
+            if (alpha >= beta):
+                break
         
         return (max_value, chosed_action)
     
@@ -136,12 +144,15 @@ def minimax2(state: Board, turn, depth, color):
             new_state = Board(state._state)
             if (new_state._turn_color != color.opponent):
                 new_state._turn_color = color.opponent
-            print(new_state.render(), "min")
             new_state.apply_action(action)
-            value, _= minimax2(new_state, "max", depth - 1, color)
+            value, _= minimax(new_state, "max", depth - 1, color)
             if (value < min_value):
                 min_value = value
                 chosed_action = action
+            beta = min(beta, min_value)
+            if (beta <= alpha):
+                break
+
         return (min_value, chosed_action)
 
 
@@ -171,6 +182,7 @@ class Agent:
                 #print("CCCCCCCCCCCCCCCCCCCCCCCCCCC\n", self._state.render(), "CCCCCCCCCCCCCCCCCCCCCCCCCCC\n")
                 #print(self._state._state)
                 t = minimax(self._state, "max", 2, PlayerColor.BLUE)
+                print(t, t[1])
                 return t[1]
             
 
