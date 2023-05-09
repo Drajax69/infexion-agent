@@ -5,23 +5,23 @@ from .commonutils import *
 import time
 
 
-def min_max_strat2(state:Board, current_depth: int, player: PlayerColor, alpha = float('-inf'), beta = float('inf'), MAX_TIME=5):
+def min_max_strat2(state:Board, current_depth: int, player: PlayerColor, alpha = float('-inf'), beta = float('inf'), initialCall=False, MAX_TIME=5):
     if current_depth == 0:
         return (state.util(), None)
     if ((state.game_won(player) or state.game_won(player.opponent)) and current_depth < 2):
         return (state.util(), None)
     ##############################################
-    # """To ensure we never cross the time limit"""
+    """To ensure we never cross the time limit"""
     global ELAPSED_TIME,START_TIME
     
 
-    # if initialCall:
-    #     START_TIME = time.time()
-    #     ELAPSED_TIME = 0
+    if initialCall:
+        START_TIME = time.time()
+        ELAPSED_TIME = 0
 
     ELAPSED_TIME = time.time() - START_TIME
     if(ELAPSED_TIME >= MAX_TIME):
-        return "EXIT"
+        return (state.util(), None)
 
     ##############################################  
     if player == PlayerColor.RED :
@@ -35,7 +35,7 @@ def min_max_strat2(state:Board, current_depth: int, player: PlayerColor, alpha =
                 best_score = maximising_score
                 best_action = action
             alpha = max(alpha, best_score)
-            if beta <= alpha:
+            if beta <= alpha or ELAPSED_TIME >= MAX_TIME:
                 break
         return (best_score, best_action)
     else :
@@ -49,30 +49,25 @@ def min_max_strat2(state:Board, current_depth: int, player: PlayerColor, alpha =
                 worst_score = minimising_score
                 best_action = action
             beta = min(beta, worst_score)
-            if beta <= alpha:
+            if beta <= alpha or ELAPSED_TIME >= MAX_TIME:
                 break
         return (worst_score, best_action)
 
-def iterative_deepening_minmax(state: Board, player: PlayerColor, MAX_TIME=5, turn=1):
-    global START_TIME, ELAPSED_TIME
-    START_TIME = time.time()
-    ELAPSED_TIME = 0
-    depth = 2
-    best_action = None
-    second_best_action = None
+# def iterative_deepening_search(state: Board, player: PlayerColor, MAX_TIME=5):
+#     global START_TIME, ELAPSED_TIME
+#     START_TIME = time.time()
+#     depth = 1
+#     best_action = None
 
-    while True:
-        try: # Thrown in try-catch because it will fail for the last depth we explore
-            if(turn<5 and depth==4):
-                break
-            second_best_action = best_action
-            best_score, best_action = min_max_strat2(state, depth, player, MAX_TIME=MAX_TIME)
-        except:
-            break
-        depth += 1
-        ELAPSED_TIME = time.time() - START_TIME
-        # print(f"{depth}||{ELAPSED_TIME}||{best_action}")
-        if ELAPSED_TIME >= MAX_TIME:
-            break
-    print(f"Went till depth {depth}")
-    return second_best_action if best_action is None else best_action
+#     while True:
+#         try:
+#             best_score, best_action = min_max_strat2(state, depth, player, MAX_TIME=MAX_TIME, initialCall=True)
+#             depth += 1
+#         except TimeoutError:
+#             break
+
+#         ELAPSED_TIME = time.time() - START_TIME
+#         if ELAPSED_TIME >= MAX_TIME:
+#             break
+
+#     return best_action

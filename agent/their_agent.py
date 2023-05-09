@@ -6,7 +6,7 @@ from referee.game import \
     PlayerColor, Action, SpawnAction, SpreadAction, HexDir
 from .board import *
 from typing import List
-from .min_max_strat2 import *
+from .min_max import *
 from .commonutils import START_TIME
 # This is my red Agent playing
 # The strategy used will be called by the action funciton

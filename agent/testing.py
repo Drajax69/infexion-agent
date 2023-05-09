@@ -42,14 +42,18 @@ class Agent:
     
         
         """ Dynamic time allocation for search """
-        max_time = self.time_remaining*(self.turn_count/170.0)
+        # max_time = self.time_remaining*(self.turn_count/170.0)
+        if(self.time_remaining>15): # Calm mode
+            max_time = self.turn_count/2.5
+        else:
+            max_time = self.time_remaining*(self.turn_count/170.0)
 
         actions = self._board.possible_moves_pruned(self._color)
         ''' Dynamic Deepening '''
-        depth = self.get_depth(len(actions))
-        print(f'{self._color}::{max_time}::{self.time_remaining} || Depth: {depth} || turn: {self.turn_count} || {len(actions)}')
+        # depth = self.get_depth(len(actions))
+        print(f'{self._color}::{max_time}::{self.time_remaining}|| turn: {self.turn_count} || {len(actions)}')
 
-        return min_max_strat2(self._board, depth, self._color, initialCall=True,MAX_TIME=max_time)[1] # Currently choosing the first valid move I can find
+        return iterative_deepening_minmax(self._board, self._color, max_time, turn=self.turn_count) # Currently choosing the first valid move I can find
 
     def turn(self, color: PlayerColor, action: Action, **referee: dict):
         """
