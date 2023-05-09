@@ -1,5 +1,5 @@
 from copy import deepcopy
-from .commonutils import *
+from agent.commonutils import *
 from referee.game.actions import *
 from referee.game.player import PlayerColor
 from referee.game.hex import HexDir, HexPos

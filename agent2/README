@@ -1,0 +1,22 @@
+End of tomorrow tasks:
+    - Finish a bit of the report: Amri
+    - Clean up min_max_strat2 function: Amri
+    - Rename files so that Gradescope accepts them: Luoti
+    - Add team.py file to folder: Luoti
+    - Delete unnecessary files: Luoti
+    - Test min_max_strat in cases such as:------->Luoti
+        - Does it work for both Blue and Red?
+        - Does it win against minmax of degree 2, if playing against itself
+        - Can we use degree 4?
+        - Anything else you can thing of
+
+Enhancements(AMRI):
+    - Dynamic depth: Depending on number of moves //  How much time/resources is being taken
+    - Presorting moves
+    - BitBoard representation instead of dictionary
+    
+
+
+Details as of now:
+- their_agent implements min_max_strat2 -> This is the faster strategy as far as I can tell
+
