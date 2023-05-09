@@ -131,33 +131,33 @@ class Board:
         return valid_moves
 
     def possible_moves_pruned(self, color: PlayerColor) -> List[Action]:
-            """
-            Return a list of pruned moves for a Player
-            Pruning Strategies:
-            - Symmetry of board
-            - Unnecessary Spawns
-            - Unnecessary Spread (Careful)
-            - Spread operations first
-            """
+        """
+        Return a list of pruned moves for a Player
+        Pruning Strategies:
+        - Symmetry of board
+        - Unnecessary Spawns
+        - Unnecessary Spread (Careful)
+        - Spread operations first
+        """
 
-            valid_moves = []
-            empty_cells = self.get_empty_cells()
+        valid_moves = []
+        empty_cells = self.get_empty_cells()
 
-            # First move returns Spawn in middle
-            if(len(empty_cells) == 49):
-                return [SpawnAction(HexPos(3,3))]
+        # First move returns Spawn in middle
+        if(len(empty_cells) == 49):
+            return [SpawnAction(HexPos(3,3))]
 
-            for cell in self.get_player_tiles(color): 
-                for direction in HexDir:
-                    if(self.pruned_valid(SpreadAction(cell, direction), valid_moves, color)):
-                        valid_moves.append(SpreadAction(cell, direction))
+        for cell in self.get_player_tiles(color): 
+            for direction in HexDir:
+                if(self.pruned_valid(SpreadAction(cell, direction), valid_moves, color)):
+                    valid_moves.append(SpreadAction(cell, direction))
 
-            for cell in empty_cells: 
-                if(self.verify_legal(SpawnAction(cell))): # Create verify legal function
-                    if(self.pruned_valid(SpawnAction(cell), valid_moves, color)):
-                        valid_moves.append(SpawnAction(cell))
-
-            return valid_moves
+        for cell in empty_cells: 
+            if(self.verify_legal(SpawnAction(cell))): # Create verify legal function
+                if(self.pruned_valid(SpawnAction(cell), valid_moves, color)):
+                    valid_moves.append(SpawnAction(cell))
+        # return valid_moves
+        return sorted(valid_moves, key=lambda action: self.apply_action(action, color).util(), reverse=color== PlayerColor.RED) 
 
 
     def pruned_valid(self, action: Action, valid_moves: List[Action], color: PlayerColor):
@@ -194,4 +194,10 @@ class Board:
         Returns 0 if opponent has no tiles
         """
         return not len(self.get_player_tiles(opponent(player)))
+
+                
+    def util(self): # Catered assuming RED is maxing and blue is minimising 
+        powers = self.calculate_power()
+        util_func = (powers[PlayerColor.RED] - powers[PlayerColor.BLUE])
+        return util_func
 

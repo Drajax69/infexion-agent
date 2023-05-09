@@ -1,6 +1,10 @@
 
 from referee.game.player import PlayerColor
 
+""" MAX TIME CAN BE DYNAMIC TOO """
+START_TIME = -1
+ELAPSED_TIME = 0
+
 
 def apply_ansi(str, bold=True, color=None):
     """

@@ -13,6 +13,8 @@ End of tomorrow tasks:
 Enhancements(AMRI):
     - Dynamic depth: Depending on number of moves //  How much time/resources is being taken
     - Presorting moves
+    - Dynamic Time upperbound
+
     - BitBoard representation instead of dictionary
     
 

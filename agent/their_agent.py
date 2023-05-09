@@ -6,9 +6,8 @@ from referee.game import \
     PlayerColor, Action, SpawnAction, SpreadAction, HexDir
 from .board import *
 from typing import List
-from .min_max_strategy import *
 from .min_max_strat2 import *
-
+from .commonutils import START_TIME
 # This is my red Agent playing
 # The strategy used will be called by the action funciton
 # The 
@@ -19,6 +18,8 @@ class Agent:
         """
         Initialise the agent.
         """
+        
+
         self._board = Board()
         self._color = color
         match color:
@@ -32,7 +33,8 @@ class Agent:
         """
         Return the next action to take.
         """
-        return min_max_strat2(self._board, 3, self._color)[1]# Currently choosing the first valid move I can find
+
+        return min_max_strat2(self._board, 3, self._color,initialCall=True)[1]# Currently choosing the first valid move I can find
 
     def turn(self, color: PlayerColor, action: Action, **referee: dict):
         """

@@ -6,9 +6,9 @@ from referee.game import \
     PlayerColor, Action, SpawnAction, SpreadAction, HexDir
 from .board import *
 from typing import List
-from .min_max_strategy import *
 from .min_max_strat2 import *
-
+from .commonutils import *
+import time
 # This is my red Agent playing
 # The strategy used will be called by the action funciton
 # The 
@@ -19,20 +19,37 @@ class Agent:
         """
         Initialise the agent.
         """
+        self.time_remaining = 180
+        self.turn_count = 1
         self._board = Board()
         self._color = color
         match color:
             case PlayerColor.RED:
-                print(" -- MY AGENT IS RED")
+                print("-- MY AGENT IS RED")
             case PlayerColor.BLUE:
-                print(" -- MY AGENT IS BLUE")
+                print("-- MY AGENT IS BLUE")
 
 
     def action(self, **referee: dict) -> Action:
         """
         Return the next action to take.
         """
-        return min_max_strat2(self._board, 4, self._color)[1]# Currently choosing the first valid move I can find
+        # Reset globals
+        # START_TIME = None
+        # ELAPSED_TIME = 0
+        self.time_remaining = referee['time_remaining']
+        self.turn_count += 1
+    
+        
+        """ Dynamic time allocation for search """
+        max_time = self.time_remaining*(self.turn_count/170.0)
+
+        actions = self._board.possible_moves_pruned(self._color)
+        ''' Dynamic Deepening '''
+        depth = self.get_depth(len(actions))
+        print(f'{self._color}::{max_time}::{self.time_remaining} || Depth: {depth} || turn: {self.turn_count} || {len(actions)}')
+
+        return min_max_strat2(self._board, depth, self._color, initialCall=True,MAX_TIME=max_time)[1] # Currently choosing the first valid move I can find
 
     def turn(self, color: PlayerColor, action: Action, **referee: dict):
         """
@@ -40,12 +57,24 @@ class Agent:
         """
         match action:
             case SpawnAction(cell):
-                print(f"Testing: {color} SPAWN at {cell}")
                 self._board.spawn(cell, color)
-                # update my board
                 pass
             case SpreadAction(cell, direction):
-                print(f"Testing: {color} SPREAD from {cell}, {direction}")
                 self._board.spread(cell, direction, color)
                 # update my board
                 pass
+
+    def get_depth(self,num_actions):
+        if self.turn_count < 4:
+            depth = 3
+        elif self.turn_count <= 15 and num_actions < 70:
+            depth = 4
+        elif num_actions < 20:
+            depth = 5
+        elif num_actions < 70:
+            depth = 4
+        elif num_actions < 140:
+            depth = 3
+        else:
+            depth = 2
+        return depth
