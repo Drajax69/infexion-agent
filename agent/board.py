@@ -144,8 +144,8 @@ class Board:
         empty_cells = self.get_empty_cells()
 
         # First move returns Spawn in middle
-        if(len(empty_cells) == 49):
-            return [SpawnAction(HexPos(3,3))]
+        # if(len(empty_cells) == 49):
+        #     return [SpawnAction(HexPos(3,3))]
 
         for cell in self.get_player_tiles(color): 
             for direction in HexDir:
@@ -157,8 +157,8 @@ class Board:
                 if(self.pruned_valid(SpawnAction(cell), valid_moves, color)):
                     valid_moves.append(SpawnAction(cell))
         # return valid_moves
-        return sorted(valid_moves, key=lambda action: self.apply_action(action, color).util(), reverse=color== PlayerColor.RED) 
-
+        valid_moves.sort(key=lambda action: self.apply_action(action, color).util(), reverse=color== PlayerColor.RED)
+        return valid_moves
 
     def pruned_valid(self, action: Action, valid_moves: List[Action], color: PlayerColor):
         match action:

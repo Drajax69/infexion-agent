@@ -34,7 +34,7 @@ class Agent:
         Return the next action to take.
         """
 
-        return min_max_strat2(self._board, 3, self._color,initialCall=True)[1]# Currently choosing the first valid move I can find
+        return min_max_strat2(self._board, 3, self._color,initialCall=True, MAX_TIME=100000)[1]# Currently choosing the first valid move I can find
 
     def turn(self, color: PlayerColor, action: Action, **referee: dict):
         """

@@ -6,7 +6,7 @@ from referee.game import \
     PlayerColor, Action, SpawnAction, SpreadAction, HexDir
 from .board import *
 from typing import List
-from .min_max_strat2 import *
+from .min_max import *
 from .commonutils import *
 import time
 # This is my red Agent playing
@@ -40,20 +40,23 @@ class Agent:
         self.time_remaining = referee['time_remaining']
         self.turn_count += 1
     
-        
-        """ Dynamic time allocation for search """
-        # max_time = self.time_remaining*(self.turn_count/170.0)
-        if(self.time_remaining>15): # Calm mode
-            max_time = self.turn_count/2.5
-        else:
-            max_time = self.time_remaining*(self.turn_count/170.0)
-
         actions = self._board.possible_moves_pruned(self._color)
         ''' Dynamic Deepening '''
-        # depth = self.get_depth(len(actions))
-        print(f'{self._color}::{max_time}::{self.time_remaining}|| turn: {self.turn_count} || {len(actions)}')
+        depth = self.get_depth(len(actions))
+        """ Dynamic time allocation for search """
 
-        return iterative_deepening_minmax(self._board, self._color, max_time, turn=self.turn_count) # Currently choosing the first valid move I can find
+        if(self.time_remaining>15 and depth<4): # Calm mode
+            max_time = 10
+        elif(depth>3 and self.time_remaining>30): # Medium Panic mode
+            max_time = 30
+        else: # we dont have time so make a move, any move mode
+            max_time = self.time_remaining*(self.turn_count/170.0)
+
+        print(f'{self._color}::{max_time}::{self.time_remaining}|| turn: {self.turn_count} || depth: {depth }|| {len(actions)}')
+        if(self._color == PlayerColor.BLUE):
+            return min_max_strat2(self._board, depth, self._color, initialCall=True, MAX_TIME=max_time)[1]
+        else:
+            return min_max_strat2(self._board, 3, self._color, initialCall=True, MAX_TIME=max_time)[1]
 
     def turn(self, color: PlayerColor, action: Action, **referee: dict):
         """
@@ -71,13 +74,13 @@ class Agent:
     def get_depth(self,num_actions):
         if self.turn_count < 4:
             depth = 3
-        elif self.turn_count <= 15 and num_actions < 70:
+        elif self.turn_count >= 20 and num_actions <= 90 and self.time_remaining>40:
             depth = 4
-        elif num_actions < 20:
+        elif num_actions < 10 and self.turn_count>4:
             depth = 5
-        elif num_actions < 70:
+        elif num_actions < 50 and self.time_remaining>10:
             depth = 4
-        elif num_actions < 140:
+        elif num_actions < 140 and self.time_remaining>2:
             depth = 3
         else:
             depth = 2

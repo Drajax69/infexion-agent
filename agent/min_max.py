@@ -20,6 +20,7 @@ def min_max_strat2(state:Board, current_depth: int, player: PlayerColor, alpha =
         ELAPSED_TIME = 0
 
     ELAPSED_TIME = time.time() - START_TIME
+    
     if(ELAPSED_TIME >= MAX_TIME):
         return (state.util(), None)
 

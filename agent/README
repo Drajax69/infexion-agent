@@ -15,10 +15,9 @@ Enhancements(AMRI):
     - Presorting moves
     - Dynamic Time upperbound
 
-    - BitBoard representation instead of dictionary
+    - BitBoard representation instead of dictionary (DID NOT DO IT)
     
 
-
-Details as of now:
-- their_agent implements min_max_strat2 -> This is the faster strategy as far as I can tell
+    Problems
+    - Is depth 4 worth it? 
 
